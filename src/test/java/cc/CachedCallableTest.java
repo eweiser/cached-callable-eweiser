@@ -31,4 +31,18 @@ public class CachedCallableTest {
         verify(delegate, times(1)).call();
     }
 
+    @Test
+    public void testException() throws Exception {
+        when(delegate.call()).thenThrow(new Exception());
+        int exceptionsCaught = 0;
+        for (int i = 0; i < 2; i++) {
+            try {
+                cachedCallable.call();
+            } catch (Exception e) {
+                exceptionsCaught++;
+            }
+        }
+        assertEquals(2, exceptionsCaught);
+        verify(delegate, times(1)).call();
+    }
 }
